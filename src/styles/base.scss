@@ -1,0 +1,118 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-size: var(--step-0);
+    line-height: var(--lh-0);
+    font-family: var(--body);
+    min-height: 100vh;
+    min-height: 100svh;
+    position: relative;
+}
+
+a {
+    line-height: var(--lh-0);
+    color: inherit;
+    text-decoration-thickness: from-font;
+    text-underline-offset: 2px;
+    opacity: 0.5;
+    &[href] {
+        opacity: 1;
+    }
+}
+
+h1 {
+    font-size: var(--step-5);
+    line-height: var(--lh-5);
+}
+
+h2 {
+    font-size: var(--step-3);
+    line-height: var(--lh-3);
+}
+
+h3 {
+    font-size: var(--step-2);
+    line-height: var(--lh-2);
+}
+
+h4 {
+    font-size: var(--step-1);
+    line-height: var(--lh-1);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--heading);
+    font-weight: bold;
+    text-wrap: pretty;
+    > a {
+        line-height: inherit;
+    }
+}
+
+hr {
+    border: 1px solid var(--contrast-color, var(--gray-100));
+    box-shadow:
+        0 0 20px var(--unsplash-color),
+        0 0 10px var(--unsplash-color),
+        0 0 5px var(--unsplash-color),
+        0 0 2px var(--unsplash-color);
+}
+
+small {
+    font-size: var(--step--1);
+}
+
+p {
+    margin-block: var(--space-s);
+}
+
+blockquote {
+    padding-inline: var(--space-s);
+    margin: 0;
+    border-inline-start: 2px solid var(--contrast-color, var(--gray-800));
+    & > p:first-child {
+        margin-block-start: 0;
+    }
+    & > p:last-child {
+        margin-block-end: 0;
+    }
+}
+
+
+button {
+    font-family: var(--body);
+    cursor: pointer;
+    border: none;
+    color: white;
+    background-color: var(--primary-700);
+    border-radius: 0;
+    font-weight: 600;
+    font-size: var(--step-0);
+    padding: var(--space-xs) var(--space-s);
+    text-align: center;
+}
+button:hover,
+button:focus {
+    background-color: var(--primary-800);
+}
+button:disabled {
+    opacity: 0.8;
+}
+
+textarea {
+    resize: vertical;
+    min-height: var(--space-2xl);
+    @supports(field-sizing: content) {
+        field-sizing: content;
+        resize: none;
+    }
+}
