@@ -17,16 +17,53 @@ const paragraphs = (await response.json()) as {
 		{
 			paragraphs.map((paragraph) => (
 				<div class="translations l-switcher">
-					<p>{paragraph.english}</p>
-					<p>{paragraph.spanish}</p>
+					<p data-lang="english">{paragraph.english}</p>
+					<p data-lang="spanish">{paragraph.spanish}</p>
 				</div>
 			))
 		}
+		<div class="controls">
+			<label>
+				<input type="checkbox" name="english" checked />
+				English
+			</label>
+			<label>
+				<input type="checkbox" name="spanish" checked />
+				Spanish
+			</label>
+		</div>
 	</main>
 </Layout>
 
 <style lang="scss">
 	.translations {
 		--l-switcher-switchpoint: 10rem;
+	}
+
+	[data-lang] {
+		display: none;
+		margin-top: 0;
+	}
+
+	main:has(input[name="english"]:checked) {
+		[data-lang="english"] {
+			display: block;	
+		}
+	}
+	main:has(input[name="spanish"]:checked) {
+		[data-lang="spanish"] {
+			display: block;
+		}
+	}
+	.controls {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 1rem;
+		background: white;
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
 	}
 </style>
