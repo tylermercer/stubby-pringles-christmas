@@ -14,7 +14,7 @@
 .l-switcher {
     display: flex;
     flex-wrap: wrap;
-    --l-switcher-modifier: calc(50rem - 100%);
+    --l-switcher-modifier: calc(var(--l-switcher-switchpoint, 50rem) - 100%);
     gap: var(--space-m);
 }
 .l-switcher > * {

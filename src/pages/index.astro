@@ -1,15 +1,32 @@
 ---
-import Layout from '@layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import Layout from "@layouts/Base.astro";
+import { getCollection } from "astro:content";
 
-const response = await fetch(`${import.meta.env.GOOGLE_SHEET_APP_URL}?s=Paragraphs`);
-const paragraphs = await response.json() as { english: string, spanish: string}[];
-
+const response = await fetch(
+	`${import.meta.env.GOOGLE_SHEET_APP_URL}?s=Paragraphs`,
+);
+const paragraphs = (await response.json()) as {
+	english: string;
+	spanish: string;
+}[];
 ---
 
 <Layout>
 	<main class="u-guttered">
 		<h1>Stubby Pringle's Christmas</h1>
-		{paragraphs.map((paragraph) => <p>{paragraph.english}</p>)}
+		{
+			paragraphs.map((paragraph) => (
+				<div class="translations l-switcher">
+					<p>{paragraph.english}</p>
+					<p>{paragraph.spanish}</p>
+				</div>
+			))
+		}
 	</main>
 </Layout>
+
+<style lang="scss">
+	.translations {
+		--l-switcher-switchpoint: 10rem;
+	}
+</style>
