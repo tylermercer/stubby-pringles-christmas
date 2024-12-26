@@ -1,14 +1,15 @@
 ---
-import Welcome from '@components/Welcome.astro';
 import Layout from '@layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
-const paragraphs = (await getCollection('paragraphs')).sort((a, b) => a.id.localeCompare(b.id));
+const response = await fetch(`${import.meta.env.GOOGLE_SHEET_APP_URL}?s=Paragraphs`);
+const paragraphs = await response.json() as { english: string, spanish: string}[];
 
 ---
 
 <Layout>
 	<main class="u-guttered">
-		{paragraphs.map((paragraph) => <p>{paragraph.data.english}</p>)}
+		<h1>Stubby Pringle's Christmas</h1>
+		{paragraphs.map((paragraph) => <p>{paragraph.english}</p>)}
 	</main>
 </Layout>
