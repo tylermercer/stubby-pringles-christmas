@@ -13,6 +13,7 @@ const paragraphs = (await response.json()) as {
 
 <Layout>
 	<main class="u-guttered">
+                <h1>Stubby Pringle's Christmas</h1>
 		<fieldset class="controls">
 			<label>
 				<input type="radio" name="translation" value="english" />
@@ -27,7 +28,6 @@ const paragraphs = (await response.json()) as {
 				Both
 			</label>
 		</fieldset>
-		<h1>Stubby Pringle's Christmas</h1>
 		{
 			paragraphs.map((paragraph) => (
 				<div class="translations l-switcher">
