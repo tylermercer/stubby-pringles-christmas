@@ -24,15 +24,15 @@ const paragraphs = (await response.json()) as {
 		}
 		<fieldset class="controls">
 			<label>
-				<input type="radio" value="english" />
+				<input type="radio" name="translation" value="english" />
 				English
 			</label>
 			<label>
-				<input type="radio" value="spanish" />
+				<input type="radio" name="translation" value="spanish" />
 				Spanish
 			</label>
                         <label>
-				<input type="radio" value="english spanish" checked />
+				<input type="radio" name="translation" value="english spanish" checked />
 				Both
 			</label>
 		</fieldset>
