@@ -12,26 +12,30 @@ const paragraphs = (await response.json()) as {
 
 <Layout>
 	<main class="u-guttered">
-                <h1>Stubby Pringle's Christmas</h1>
+		<h1>Stubby Pringle's Christmas</h1>
 		<fieldset class="controls">
 			<label>
-				<input type="radio" name="translation" value="english" />
+				<input type="radio" name="translation" value="en" />
 				English
 			</label>
 			<label>
-				<input type="radio" name="translation" value="spanish" />
+				<input type="radio" name="translation" value="es" />
 				Spanish
 			</label>
-                        <label>
-				<input type="radio" name="translation" value="english spanish" checked />
+			<label>
+				<input type="radio" name="translation" value="en es" checked />
 				Both
 			</label>
 		</fieldset>
 		{
 			paragraphs.map((paragraph) => (
 				<div class="translations l-switcher">
-					<p data-lang="english">{paragraph.english}</p>
-					<p data-lang="spanish">{paragraph.spanish}</p>
+					<p class="translation" lang="en">
+						{paragraph.english}
+					</p>
+					<p class="translation" lang="es">
+						{paragraph.spanish}
+					</p>
 				</div>
 			))
 		}
@@ -43,25 +47,20 @@ const paragraphs = (await response.json()) as {
 		--l-switcher-switchpoint: 10rem;
 	}
 
-	[data-lang] {
+	.translation {
 		display: none;
 		margin-top: 0;
 	}
 
-	main:has(input[value~="english"]:checked) {
-		[data-lang="english"] {
-			display: block;	
-		}
+	main:has(input[value~="en"]:checked) .translation:lang(en),
+	main:has(input[value~="es"]:checked) .translation:lang(es) {
+		display: block;
 	}
-	main:has(input[value~="spanish"]:checked) {
-		[data-lang="spanish"] {
-			display: block;
-		}
-	}
+
 	.controls {
 		display: flex;
 		justify-content: center;
 		gap: 1rem;
-                border: none;
+		border: none;
 	}
 </style>
