@@ -22,16 +22,20 @@ const paragraphs = (await response.json()) as {
 				</div>
 			))
 		}
-		<div class="controls">
+		<fieldset class="controls">
 			<label>
-				<input type="checkbox" name="english" checked />
+				<input type="radio" value="english" />
 				English
 			</label>
 			<label>
-				<input type="checkbox" name="spanish" checked />
+				<input type="radio" value="spanish" />
 				Spanish
 			</label>
-		</div>
+                        <label>
+				<input type="radio" value="english spanish" checked />
+				Both
+			</label>
+		</fieldset>
 	</main>
 </Layout>
 
@@ -45,12 +49,12 @@ const paragraphs = (await response.json()) as {
 		margin-top: 0;
 	}
 
-	main:has(input[name="english"]:checked) {
+	main:has(input[value~="english"]:checked) {
 		[data-lang="english"] {
 			display: block;	
 		}
 	}
-	main:has(input[name="spanish"]:checked) {
+	main:has(input[value~="spanish"]:checked) {
 		[data-lang="spanish"] {
 			display: block;
 		}
