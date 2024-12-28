@@ -50,4 +50,12 @@
     --heading: Arial, sans-serif;
 
     /* Colors */
+    --primary: #6f0f26;
+    --text-on-primary: #fff;
+    --accent: #a32c48;
+    @media (prefers-color-scheme: dark) {
+        --primary: #440010;
+        --text-on-primary: #fff;
+        --accent: #e69494;
+    }
 }
