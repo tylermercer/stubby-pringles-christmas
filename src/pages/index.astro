@@ -17,18 +17,9 @@ const paragraphs = (await response.json()) as {
 				<h1>Stubby Pringle's Christmas</h1>
 				<div class="byline">
 					<p>
-						By Jack Schaefer. Translated by <a
+						By Jack Schaefer. Translated into Spanish by <a
 							href="https://tylermercer.net">Tyler Mercer</a
-						> (with the assistance of ChatGPT and Google Translate).
-					</p>
-					<p>
-						I took the liberty of translating this story into
-						Spanish for my personal use. If you work for Houghton
-						Mifflin (the publisher of the story in print back when
-						it was available) or are one of Jack Shaefer's heirs,
-						and you would like me to take this page down, please
-						<a href="https://tylermercer.net/contact">contact me</a>
-						and I'll be happy to oblige.
+						>.<sup><a href="#disclaimer">1</a></sup>
 					</p>
 				</div>
 			</hgroup>
@@ -68,43 +59,60 @@ const paragraphs = (await response.json()) as {
 		</div>
 	</main>
 	<footer class="u-guttered">
-		Text from <a href="https://familychristmasonline.com/"
-			>Family Christmas Online</a
-		>.
+		<p>
+			Text from <a href="https://familychristmasonline.com/"
+				>Family Christmas Online</a
+			>.
+		</p>
+		<p id="disclaimer">
+			1: I took the liberty of translating this story into Spanish (with
+			the assistance of ChatGPT and Google Translate) for my personal use.
+			If you work for Houghton Mifflin (the publisher of the story in
+			print back when it was available) or are one of Jack Shaefer's
+			heirs, and you would like me to take this page down, please
+			<a href="https://tylermercer.net/contact">contact me</a>
+			and I'll be happy to oblige.
+		</p>
+		<p>
+			The source code for this page is available on <a
+				href="https://github.com/tylermercer/stubby-pringles-christmas"
+				>GitHub</a
+			>.
+		</p>
 	</footer>
+
+	<style lang="scss">
+		header {
+			background-color: var(--primary);
+			color: var(--text-on-primary);
+		}
+		.byline {
+			opacity: 0.7;
+		}
+		.translations {
+			--l-switcher-switchpoint: 10rem;
+		}
+
+		.translation {
+			display: none;
+			margin-top: 0;
+		}
+
+		main:has(input[value~="en"]:checked) .translation:lang(en),
+		main:has(input[value~="es"]:checked) .translation:lang(es) {
+			display: block;
+		}
+
+		.controls {
+			display: flex;
+			justify-content: center;
+			gap: 1rem;
+			border: none;
+			margin-bottom: var(--space-s);
+		}
+		footer {
+			font-size: var(--step--1);
+			opacity: 0.7;
+		}
+	</style>
 </Layout>
-
-<style lang="scss">
-	header {
-		background-color: var(--primary);
-		color: var(--text-on-primary);
-	}
-	.byline {
-		opacity: 0.7;
-	}
-	.translations {
-		--l-switcher-switchpoint: 10rem;
-	}
-
-	.translation {
-		display: none;
-		margin-top: 0;
-	}
-
-	main:has(input[value~="en"]:checked) .translation:lang(en),
-	main:has(input[value~="es"]:checked) .translation:lang(es) {
-		display: block;
-	}
-
-	.controls {
-		display: flex;
-		justify-content: center;
-		gap: 1rem;
-		border: none;
-		margin-bottom: var(--space-s);
-	}
-	footer {
-		font-size: var(--step--1);
-		opacity: 0.7;
-	}
-</style>
