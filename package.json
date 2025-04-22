@@ -9,8 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.1.0",
-    "astro": "^5.1.1",
+    "@astrojs/cloudflare": "^12.5.0",
+    "astro": "^5.7.4",
     "astro-meta-tags": "^0.3.1",
     "modern-normalize": "^3.0.1"
   },
