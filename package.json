@@ -1,21 +1,22 @@
 {
-  "name": "astro-cloudflare-starter",
+  "name": "stubby-pringles-christmas",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "wrangler types && astro dev",
+    "build": "wrangler types && astro build",
+    "preview": "wrangler dev --port 4321",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.5.0",
-    "astro": "^5.7.4",
-    "astro-meta-tags": "^0.3.1",
+    "@astrojs/cloudflare": "14.4.9",
+    "astro": "7.4.13",
+    "astro-meta-tags": "^0.4.1",
     "modern-normalize": "^3.0.1"
   },
   "devDependencies": {
     "sass-embedded": "^1.83.0",
-    "wrangler": "^3.92.0"
+    "wrangler": "^4.165.0"
   }
 }

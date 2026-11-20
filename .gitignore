@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# generated worker types
+worker-configuration.d.ts
+
+# wrangler cache
+.wrangler/
