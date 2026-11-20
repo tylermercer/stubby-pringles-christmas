@@ -1,0 +1,96 @@
+name: PR Deployment
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+
+      - name: Cache assets
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.astro
+            .astro
+          key: assets-${{ github.run_id }} # Save each run's cache
+          restore-keys: | # Restore most recent cache
+            assets-
+
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Extract variables
+        id: extract_vars
+        run: | # slugified_branch is the branch slugified and truncated to 28 chars, to fit in the preview subdomain
+          branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          # Slugify the branch name: replace non-alphanumeric with hyphens, convert to lowercase
+          slugified_branch=$(echo "$branch" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--\+/-/g' | sed 's/^-//;s/-$//')
+          truncated_slugified_branch=${slugified_branch:0:28}
+          # Remove trailing hyphen if truncation caused one
+          if [[ "${truncated_slugified_branch: -1}" == "-" ]]; then
+            truncated_slugified_branch=${truncated_slugified_branch::-1}
+          fi
+          echo "branch=${branch}" >> $GITHUB_OUTPUT
+          echo "slugified_branch=${truncated_slugified_branch}" >> $GITHUB_OUTPUT
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "datetime=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+
+      - name: Build site
+        id: build_site
+        env:
+          PUBLIC_COMMIT_HASH: ${{ github.event.pull_request.head.sha || github.sha }}
+          GOOGLE_SHEET_APP_URL: ${{ secrets.GOOGLE_SHEET_APP_URL }}
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          echo "result=built" >> $GITHUB_OUTPUT
+
+      - name: Deploy preview to Cloudflare
+        id: deploy
+        run: pnpm exec wrangler preview --name=${{ steps.extract_vars.outputs.slugified_branch }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Add preview URL to pull request
+        if: steps.build_site.outputs.result == 'built'
+        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b
+        with:
+          comment-tag: deploy_preview
+          mode: recreate
+          message: |
+            ## Deployed to Cloudflare Workers! :rocket:
+
+            | Name                    | Result |
+            | ----------------------- | - |
+            | **Preview URL**:        | https://${{ steps.extract_vars.outputs.slugified_branch }}-stubby-pringles-christmas.tmercer.workers.dev |
+            | **Last commit:**        | `${{ steps.extract_vars.outputs.sha_short }}` |
+            | **Deployed at**:        | `${{ steps.extract_vars.outputs.datetime }}` |

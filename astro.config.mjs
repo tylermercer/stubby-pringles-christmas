@@ -5,6 +5,13 @@ import metaTags from "astro-meta-tags";
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: cloudflare(),
+  output: "static",
+  session: {
+    driver: "memory",
+  },
+  adapter: cloudflare({
+    imageService: 'compile',
+    prerenderEnvironment: 'node',
+  }),
   integrations: [metaTags()],
 });

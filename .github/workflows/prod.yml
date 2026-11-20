@@ -1,0 +1,69 @@
+name: Production Deployment
+
+# Expects these secrets to be configured in your GitHub repo:
+# - CLOUDFLARE_API_TOKEN
+# - CLOUDFLARE_ACCOUNT_ID
+# - GOOGLE_SHEET_APP_URL
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+
+      - name: Cache assets
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules/.astro
+            .astro
+          key: assets-${{ github.run_id }} # Save each run's cache
+          restore-keys: | # Restore most recent cache
+            assets-
+
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Build site
+        id: build_site
+        env:
+          PUBLIC_COMMIT_HASH: ${{ github.sha }}
+          GOOGLE_SHEET_APP_URL: ${{ secrets.GOOGLE_SHEET_APP_URL }}
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          echo "result=built" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Cloudflare
+        id: deploy
+        run: pnpm exec wrangler deploy --strict
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
